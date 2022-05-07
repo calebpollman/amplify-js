@@ -12,10 +12,9 @@
  */
 
 import { ReactElement } from 'react';
-import { InAppMessageAction } from '@aws-amplify/notifications';
 
 import { InAppMessageComponentCommonProps } from '../../types';
 
-export type InAppMessageComponentActionHandler = (action: InAppMessageAction, url?: string) => Promise<void>;
+export type HandleLinkAction = (url: string) => Promise<void>;
 
 export type InAppMessageComponent = (props: InAppMessageComponentCommonProps) => ReactElement;

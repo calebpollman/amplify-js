@@ -35,7 +35,7 @@ jest.mock('../../../../hooks/useInAppMessaging', () => ({
 
 jest.useFakeTimers();
 
-const logger = new Logger('TEST_LOGGER');
+const infoSpy = jest.spyOn(Logger.prototype, 'info');
 
 const mockUseInAppMessaging = useInAppMessaging as jest.Mock;
 const mockClearInAppMessage = jest.fn();
@@ -63,7 +63,7 @@ function CustomModalMessage() {
 
 describe('useMessage', () => {
 	beforeEach(() => {
-		(logger.info as jest.Mock).mockClear();
+		jest.resetAllMocks();
 	});
 
 	// happy path test for banner and full screen layouts
@@ -146,8 +146,8 @@ describe('useMessage', () => {
 
 		const { Component, props } = useMessage();
 
-		expect(logger.info).toHaveBeenCalledWith(`Received unknown InAppMessage layout: ${layout}`);
-		expect(logger.info).toHaveBeenCalledTimes(1);
+		expect(infoSpy).toHaveBeenCalledWith(`Received unknown InAppMessage layout: ${layout}`);
+		expect(infoSpy).toHaveBeenCalledTimes(1);
 		expect(Component).toBeNull();
 		expect(props).toBeNull();
 	});

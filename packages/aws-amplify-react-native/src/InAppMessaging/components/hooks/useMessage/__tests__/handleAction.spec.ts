@@ -11,101 +11,71 @@
  * and limitations under the License.
  */
 
-import { Linking } from 'react-native';
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 import { InAppMessageAction } from '@aws-amplify/notifications';
 
 import handleAction from '../handleAction';
 
-jest.mock('react-native', () => ({
-	Linking: {
-		canOpenURL: jest.fn(),
-		openURL: jest.fn(),
-	},
-}));
+jest.mock('react-native', () => ({ Linking: { canOpenURL: jest.fn(), openURL: jest.fn() } }));
 
-const logger = new Logger('TEST_LOGGER');
+// use empty mockImplementation to turn off console output
+const infoSpy = jest.spyOn(Logger.prototype, 'info').mockImplementation();
+const warnSpy = jest.spyOn(Logger.prototype, 'warn').mockImplementation();
 
+const close = 'CLOSE';
 const deepLink = 'DEEP_LINK';
 const link = 'LINK';
 const url = 'https://docs.amplify.aws/';
 
-const error = 'ERROR';
+const handleLinkAction = jest.fn();
 
 describe('handleAction', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it.each([deepLink, link])('handles a %s action as expected in the happy path', async (action) => {
-		(Linking.canOpenURL as jest.Mock).mockResolvedValueOnce(true);
+	it.each([deepLink, link])('handles a %s action as expected in the happy path', (action: InAppMessageAction) => {
+		handleAction({ action, handleLinkAction, url });
 
-		await handleAction(action as InAppMessageAction, url);
-
-		expect(logger.info).toHaveBeenCalledWith(`Handle action: ${action}`);
-		expect(Linking.canOpenURL).toHaveBeenCalledWith(url);
-		expect(logger.info).toHaveBeenCalledWith(`Opening url: ${url}`);
-		expect(Linking.openURL).toHaveBeenCalledWith(url);
-		expect(logger.info).toHaveBeenCalledTimes(2);
+		expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${action}`);
+		expect(infoSpy).toHaveBeenCalledTimes(1);
 	});
 
 	it.each([deepLink, link])(
 		'logs a warning and early returns when a %s action is provided with a null url value',
-		async (action) => {
-			const invalidUrl = null;
+		(action: InAppMessageAction) => {
+			const invalidUrl = null as string;
 
-			await handleAction(action as InAppMessageAction, invalidUrl);
+			handleAction({ action, handleLinkAction, url: invalidUrl });
 
-			expect(logger.info).toHaveBeenCalledWith(`Handle action: ${action}`);
-			expect(logger.warn).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
-			expect(logger.info).toHaveBeenCalledTimes(1);
-			expect(logger.warn).toHaveBeenCalledTimes(1);
-			expect(Linking.canOpenURL).not.toHaveBeenCalled();
+			expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${action}`);
+			expect(warnSpy).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
+			expect(infoSpy).toHaveBeenCalledTimes(1);
+			expect(warnSpy).toHaveBeenCalledTimes(1);
+			expect(handleLinkAction).not.toHaveBeenCalled();
 		}
 	);
 
 	it.each([deepLink, link])(
 		'logs a warning and early returns when a %s action is provided with an undefined url value',
-		async (action) => {
-			const invalidUrl = undefined;
+		(action: InAppMessageAction) => {
+			const invalidUrl = undefined as string;
 
-			await handleAction(action as InAppMessageAction, invalidUrl);
+			handleAction({ action, handleLinkAction, url: invalidUrl });
 
-			expect(logger.info).toHaveBeenCalledWith(`Handle action: ${action}`);
-			expect(logger.warn).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
-			expect(logger.info).toHaveBeenCalledTimes(1);
-			expect(logger.warn).toHaveBeenCalledTimes(1);
-			expect(Linking.canOpenURL).not.toHaveBeenCalled();
+			expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${action}`);
+			expect(warnSpy).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
+			expect(infoSpy).toHaveBeenCalledTimes(1);
+			expect(warnSpy).toHaveBeenCalledTimes(1);
+			expect(handleLinkAction).not.toHaveBeenCalled();
 		}
 	);
 
-	it('logs a warning when Linking.canOpenUrl returns false', async () => {
-		(Linking.canOpenURL as jest.Mock).mockResolvedValueOnce(false);
+	it('logs when called with a close action', () => {
+		handleAction({ action: close, handleLinkAction, url });
 
-		await handleAction(link, url);
-
-		expect(logger.info).toHaveBeenCalledWith(`Handle action: ${link}`);
-		expect(Linking.canOpenURL).toHaveBeenCalledTimes(1);
-		expect(logger.warn).toHaveBeenCalledWith(`Unsupported url provided: ${url}`);
-		expect(Linking.openURL).not.toHaveBeenCalled();
-	});
-
-	it('logs an error when Linking.canOpenUrl fails', async () => {
-		(Linking.canOpenURL as jest.Mock).mockRejectedValueOnce(error);
-
-		await handleAction(link, url);
-
-		expect(logger.info).toHaveBeenCalledWith(`Handle action: ${link}`);
-		expect(logger.error).toHaveBeenCalledWith(`Call to Linking.canOpenURL failed: ${error}`);
-	});
-
-	it('logs an error when Linking.openUrl fails', async () => {
-		(Linking.canOpenURL as jest.Mock).mockResolvedValueOnce(true);
-		(Linking.openURL as jest.Mock).mockRejectedValue(error);
-
-		await handleAction(link, url);
-
-		expect(logger.info).toHaveBeenCalledWith(`Handle action: ${link}`);
-		expect(logger.error).toHaveBeenCalledWith(`Call to Linking.openURL failed: ${error}`);
+		expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${close}`);
+		expect(infoSpy).toHaveBeenCalledTimes(1);
+		expect(handleLinkAction).not.toHaveBeenCalled();
 	});
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2017-2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
  * the License. A copy of the License is located at
@@ -11,32 +11,32 @@
  * and limitations under the License.
  */
 
+import { Linking } from 'react-native';
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
-import isString from 'lodash/isString';
 
 import { HandleLinkAction } from './types';
 
 const logger = new Logger('Notifications.InAppMessaging');
 
-const handleAction = ({
-	action,
-	handleLinkAction,
-	url,
-}: {
-	action: string;
-	handleLinkAction: HandleLinkAction;
-	url: string;
-}) => {
-	logger.info(`Handle action: ${action}`);
+const handleLinkAction: HandleLinkAction = async (url: string) => {
+	let supported: boolean;
+	try {
+		supported = await Linking.canOpenURL(url);
+	} catch (e) {
+		logger.error(`Call to Linking.canOpenURL failed: ${e}`);
+	}
 
-	if (action === 'LINK' || action === 'DEEP_LINK') {
-		if (!isString(url)) {
-			logger.warn(`url must be of type string: ${url}`);
-			return;
-		}
+	if (!supported) {
+		logger.warn(`Unsupported url provided: ${url}`);
+		return;
+	}
 
-		handleLinkAction(url);
+	try {
+		logger.info(`Opening url: ${url}`);
+		await Linking.openURL(url);
+	} catch (e) {
+		logger.error(`Call to Linking.openURL failed: ${e}`);
 	}
 };
 
-export default handleAction;
+export default handleLinkAction;

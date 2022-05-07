@@ -4,7 +4,7 @@
 	"description": "AWS Amplify is a JavaScript library for Frontend and mobile developers building cloud-enabled applications.",
 	"main": "dist/index.js",
 	"scripts": {
-		"test": "npm run lint && jest -w 1 --coverage --maxWorkers 2 --config jest.config.js",
+		"test": "jest -w 1 --coverage --maxWorkers 2 --config jest.config.js",
 		"test:verbose": "npm run test -- --verbose",
 		"build": "npm run lint && npm run clean && babel src --out-dir dist --extensions '.ts,.tsx,.js,.jsx' --copy-files",
 		"watch": "npm run build -- --watch",

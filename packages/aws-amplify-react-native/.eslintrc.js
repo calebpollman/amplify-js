@@ -3,13 +3,13 @@ module.exports = {
 		node: true,
 	},
 	extends: [
-		'airbnb',
-		'airbnb-typescript',
+		// 'airbnb',
+		// 'airbnb-typescript',
 		'plugin:jest/recommended',
 		'plugin:react/recommended',
 		'plugin:react-hooks/recommended',
 		'plugin:@typescript-eslint/recommended-requiring-type-checking',
-		'plugin:prettier/recommended',
+		'prettier',
 	],
 	ignorePatterns: ['src/*.ts', 'src/*.tsx', 'src/API', 'src/Auth', 'src/icons', 'src/Interactions', 'src/Storage'],
 	parser: '@typescript-eslint/parser',
@@ -23,15 +23,17 @@ module.exports = {
 		sourceType: 'module',
 	},
 	plugins: ['react', '@typescript-eslint', 'react-hooks', 'jest', 'prettier'],
-	overrides: [{
-      files: ['**/*.spec.*', '**/*.test.*'],
-      plugins: ['jest'],
-      rules: {
-        // turn the original rule off for test files
-        '@typescript-eslint/unbound-method': 'off',
-        'jest/unbound-method': 'error',
-      },
-    }],
+	overrides: [
+		{
+			files: ['**/*.spec.*', '**/*.test.*'],
+			plugins: ['jest'],
+			rules: {
+				// turn the original rule off for test files
+				'@typescript-eslint/unbound-method': 'off',
+				'jest/unbound-method': 'error',
+			},
+		},
+	],
 	rules: {
 		'@typescript-eslint/member-ordering': 'error',
 		'@typescript-eslint/no-extra-semi': 'error',
@@ -71,7 +73,7 @@ module.exports = {
 				object: true,
 			},
 		],
-		'prettier/prettier': ['error', {'endOfLine': 'auto'}],
+		'prettier/prettier': ['error', { endOfLine: 'auto' }],
 		'react/jsx-props-no-spreading': 'off',
 		'react/jsx-wrap-multilines': ['error', { declaration: 'ignore' }],
 		'react/no-array-index-key': 'off',

@@ -22,13 +22,14 @@ jest.mock('react-native', () => ({
 	Image: { prefetch: jest.fn() },
 }));
 
-const logger = new Logger('TEST_LOGGER');
+// use empty mockImplementation to turn off console output
+const errorSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
 
 const url = 'https://test.jpeg';
 
 describe('prefetchNetworkImage', () => {
 	beforeEach(() => {
-		(logger.error as jest.Mock).mockClear();
+		jest.clearAllMocks();
 	});
 
 	it('behaves as expected in the happy path', async () => {
@@ -44,8 +45,8 @@ describe('prefetchNetworkImage', () => {
 
 		const output = await prefetchNetworkImage(url);
 
-		expect(logger.error).toHaveBeenLastCalledWith(`Image failed to load: ${url}`);
-		expect(logger.error).toHaveBeenCalledTimes(1);
+		expect(errorSpy).toHaveBeenLastCalledWith(`Image failed to load: ${url}`);
+		expect(errorSpy).toHaveBeenCalledTimes(1);
 
 		expect(output).toBe('failed');
 	});
@@ -56,8 +57,8 @@ describe('prefetchNetworkImage', () => {
 
 		const output = await prefetchNetworkImage(url);
 
-		expect(logger.error).toHaveBeenLastCalledWith(`Image.prefetch failed: Error: ${error}`);
-		expect(logger.error).toHaveBeenCalledTimes(1);
+		expect(errorSpy).toHaveBeenLastCalledWith(`Image.prefetch failed: Error: ${error}`);
+		expect(errorSpy).toHaveBeenCalledTimes(1);
 
 		expect(output).toBe('failed');
 	});

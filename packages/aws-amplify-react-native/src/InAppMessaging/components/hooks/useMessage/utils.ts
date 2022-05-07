@@ -26,6 +26,7 @@ import {
 } from '../../types';
 
 import handleAction from './handleAction';
+import handleLinkAction from './handleLinkAction';
 
 const logger = new Logger('Notifications.InAppMessaging');
 
@@ -50,9 +51,9 @@ export const getActionHandler = (
 	{ action, url }: { action: InAppMessageAction; url?: string },
 	onActionCallback: () => void
 ) => ({
-	async onPress() {
+	onPress() {
 		try {
-			await handleAction(action, url);
+			handleAction({ action, handleLinkAction, url });
 		} catch (e) {
 			logger.error(`handleAction failure: ${e}`);
 		} finally {

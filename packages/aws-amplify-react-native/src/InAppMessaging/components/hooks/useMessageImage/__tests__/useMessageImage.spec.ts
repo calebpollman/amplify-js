@@ -23,17 +23,17 @@ jest.mock('react-native', () => ({
 	Dimensions: { get: jest.fn(() => ({ height: 844, width: 400 })) },
 	Image: { getSize: jest.fn() },
 }));
-
 jest.mock('../utils');
 
-const logger = new Logger('TEST_LOGGER');
+// use empty mockImplementation to turn off console output
+const errorSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
 
 const src = 'https://test.jpeg';
 const image = { src };
 
 describe('useMessageImage', () => {
 	beforeEach(() => {
-		(logger.error as jest.Mock).mockClear();
+		jest.clearAllMocks();
 	});
 
 	it('behaves as expected in the happy path', async () => {
@@ -81,8 +81,8 @@ describe('useMessageImage', () => {
 
 		await waitForNextUpdate();
 
-		expect(logger.error).toHaveBeenCalledWith(`Unable to retrieve size for image: ${error}`);
-		expect(logger.error).toHaveBeenCalledTimes(1);
+		expect(errorSpy).toHaveBeenCalledWith(`Unable to retrieve size for image: ${error}`);
+		expect(errorSpy).toHaveBeenCalledTimes(1);
 
 		expect(result.current).toStrictEqual({
 			hasRenderableImage: false,
@@ -105,7 +105,7 @@ describe('useMessageImage', () => {
 
 		await waitForNextUpdate();
 
-		expect(logger.error).not.toHaveBeenCalled();
+		expect(errorSpy).not.toHaveBeenCalled();
 
 		expect(result.current).toStrictEqual({
 			hasRenderableImage: false,

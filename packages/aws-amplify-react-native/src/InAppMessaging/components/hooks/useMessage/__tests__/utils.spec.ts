@@ -13,17 +13,14 @@
 
 import { InAppMessageButton, InAppMessageContent, InAppMessageLayout } from '@aws-amplify/notifications';
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
-import { InAppMessageComponentActionHandler } from '../types';
 import { getActionHandler, getContentProps, getPositionProp } from '../utils';
 
 import handleAction from '../handleAction';
 
-jest.mock('../handleAction', () => ({
-	__esModule: true,
-	default: jest.fn(),
-}));
+jest.mock('../handleAction', () => ({ __esModule: true, default: jest.fn() }));
 
-const logger = new Logger('TEST_LOGGER');
+// use empty mockImplementation to turn off console output
+const errorSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
 
 const baseContent: InAppMessageContent = {
 	container: { style: { backgroundColor: 'purple' } },
@@ -70,7 +67,7 @@ describe('getContentProps', () => {
 			...baseContent,
 			primaryButton: {
 				title: primaryButton.title,
-				onPress: expect.any(Function) as InAppMessageComponentActionHandler,
+				onPress: expect.any(Function) as Function,
 			},
 		});
 	});
@@ -81,7 +78,7 @@ describe('getContentProps', () => {
 			...baseContent,
 			secondaryButton: {
 				title: secondaryButton.title,
-				onPress: expect.any(Function) as InAppMessageComponentActionHandler,
+				onPress: expect.any(Function) as Function,
 			},
 		});
 	});
@@ -97,16 +94,16 @@ describe('getActionHandler', () => {
 		jest.clearAllMocks();
 	});
 
-	it('behaves as expected in the happy path', async () => {
+	it('behaves as expected in the happy path', () => {
 		const actionHandler = getActionHandler({ ...secondaryButton }, onActionCallback);
 
-		await actionHandler.onPress();
+		actionHandler.onPress();
 
 		expect(handleAction).toHaveBeenCalledTimes(1);
 		expect(onActionCallback).toHaveBeenCalledTimes(1);
 	});
 
-	it('behaves as expected when handleAction results in an error', async () => {
+	it('behaves as expected when handleAction results in an error', () => {
 		const error = 'ERROR';
 		(handleAction as jest.Mock).mockImplementationOnce(() => {
 			throw new Error(error);
@@ -114,11 +111,11 @@ describe('getActionHandler', () => {
 
 		const actionHandler = getActionHandler({ ...secondaryButton }, onActionCallback);
 
-		await actionHandler.onPress();
+		actionHandler.onPress();
 
 		expect(handleAction).toHaveBeenCalledTimes(1);
-		expect(logger.error).toHaveBeenCalledTimes(1);
-		expect(logger.error).toHaveBeenCalledWith(`handleAction failure: Error: ${error}`);
+		expect(errorSpy).toHaveBeenCalledTimes(1);
+		expect(errorSpy).toHaveBeenCalledWith(`handleAction failure: Error: ${error}`);
 		expect(onActionCallback).toHaveBeenCalledTimes(1);
 	});
 });
