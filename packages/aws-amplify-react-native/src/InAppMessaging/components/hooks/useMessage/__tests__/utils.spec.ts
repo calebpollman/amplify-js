@@ -67,7 +67,7 @@ describe('getContentProps', () => {
 			...baseContent,
 			primaryButton: {
 				title: primaryButton.title,
-				onPress: expect.any(Function) as Function,
+				onAction: expect.any(Function) as Function,
 			},
 		});
 	});
@@ -78,7 +78,7 @@ describe('getContentProps', () => {
 			...baseContent,
 			secondaryButton: {
 				title: secondaryButton.title,
-				onPress: expect.any(Function) as Function,
+				onAction: expect.any(Function) as Function,
 			},
 		});
 	});
@@ -97,7 +97,7 @@ describe('getActionHandler', () => {
 	it('behaves as expected in the happy path', () => {
 		const actionHandler = getActionHandler({ ...secondaryButton }, onActionCallback);
 
-		actionHandler.onPress();
+		actionHandler.onAction();
 
 		expect(handleAction).toHaveBeenCalledTimes(1);
 		expect(onActionCallback).toHaveBeenCalledTimes(1);
@@ -111,7 +111,7 @@ describe('getActionHandler', () => {
 
 		const actionHandler = getActionHandler({ ...secondaryButton }, onActionCallback);
 
-		actionHandler.onPress();
+		actionHandler.onAction();
 
 		expect(handleAction).toHaveBeenCalledTimes(1);
 		expect(errorSpy).toHaveBeenCalledTimes(1);

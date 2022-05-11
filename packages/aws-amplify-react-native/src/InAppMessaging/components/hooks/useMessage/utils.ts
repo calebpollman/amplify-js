@@ -51,7 +51,7 @@ export const getActionHandler = (
 	{ action, url }: { action: InAppMessageAction; url?: string },
 	onActionCallback: () => void
 ) => ({
-	onPress() {
+	onAction() {
 		try {
 			handleAction({ action, handleLinkAction, url });
 		} catch (e) {

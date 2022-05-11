@@ -49,8 +49,8 @@ describe('handleAction', () => {
 			handleAction({ action, handleLinkAction, url: invalidUrl });
 
 			expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${action}`);
-			expect(warnSpy).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
 			expect(infoSpy).toHaveBeenCalledTimes(1);
+			expect(warnSpy).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
 			expect(warnSpy).toHaveBeenCalledTimes(1);
 			expect(handleLinkAction).not.toHaveBeenCalled();
 		}

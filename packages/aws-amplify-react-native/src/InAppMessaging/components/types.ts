@@ -58,7 +58,7 @@ export type InAppMessageComponentStyles = {
 export type InAppMessageComponentPosition = 'bottom' | 'middle' | 'top' | null;
 
 export interface InAppMessageComponentButtonProps extends Omit<InAppMessageButton, 'action' | 'url'> {
-	onPress: () => void;
+	onAction: () => void;
 }
 
 export interface InAppMessageComponentContentProps

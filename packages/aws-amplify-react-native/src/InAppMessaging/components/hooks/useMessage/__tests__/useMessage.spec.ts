@@ -202,7 +202,7 @@ describe('useMessage', () => {
 			it('calls the expected methods via the onPress function of the primary button', () => {
 				const { props } = useMessage();
 
-				(props as BannerMessageProps).primaryButton.onPress();
+				(props as BannerMessageProps).primaryButton.onAction();
 
 				jest.runAllTimers();
 

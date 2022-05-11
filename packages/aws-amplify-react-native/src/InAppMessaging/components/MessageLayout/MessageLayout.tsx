@@ -77,7 +77,7 @@ export default function MessageLayout({ orientation, ...props }: LayoutProps) {
 				<View style={styles.buttonsContainer}>
 					{hasSecondaryButton && (
 						<Button
-							onPress={secondaryButton.onPress}
+							onPress={secondaryButton.onAction}
 							style={styles.secondaryButton.container}
 							testID={IN_APP_MESSAGING.SECONDARY_BUTTON}
 							textStyle={styles.secondaryButton.text}
@@ -87,7 +87,7 @@ export default function MessageLayout({ orientation, ...props }: LayoutProps) {
 					)}
 					{hasPrimaryButton && (
 						<Button
-							onPress={primaryButton.onPress}
+							onPress={primaryButton.onAction}
 							style={styles.primaryButton.container}
 							testID={IN_APP_MESSAGING.PRIMARY_BUTTON}
 							textStyle={styles.primaryButton.text}

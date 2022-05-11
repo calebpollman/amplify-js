@@ -26,7 +26,7 @@ jest.mock('../../MessageWrapper', () => 'MessageWrapper');
 
 const mockUseMessageImage = useMessageImage as jest.Mock;
 const onClose = jest.fn();
-const onPress = jest.fn();
+const onAction = jest.fn();
 
 const baseProps = { layout: 'MODAL' as const, onClose };
 
@@ -98,14 +98,14 @@ describe('ModalMessage', () => {
 		[
 			'primaryButton',
 			IN_APP_MESSAGING.PRIMARY_BUTTON,
-			{ onPress, title: 'primary button' },
-			{ children: 'primary button', onPress },
+			{ onAction, title: 'primary button' },
+			{ children: 'primary button', onPress: onAction },
 		],
 		[
 			'secondaryButton',
 			IN_APP_MESSAGING.SECONDARY_BUTTON,
-			{ onPress, title: 'secondary button' },
-			{ children: 'secondary button', onPress },
+			{ onAction, title: 'secondary button' },
+			{ children: 'secondary button', onPress: onAction },
 		],
 	])('correctly handles a %s prop', (key, testID, testProps, expectedProps) => {
 		mockUseMessageImage.mockReturnValueOnce({
