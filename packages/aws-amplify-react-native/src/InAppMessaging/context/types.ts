@@ -26,7 +26,6 @@ export type InAppMessageComponents = {
 
 export type InAppMessagingContextType = {
 	clearInAppMessage: () => void;
-	components: InAppMessageComponents;
 	displayInAppMessage: (inAppMessage: InAppMessage) => void;
 	inAppMessage: InAppMessage;
 	style: InAppMessageComponentStyles;
@@ -34,6 +33,5 @@ export type InAppMessagingContextType = {
 
 export type InAppMessagingProviderProps = {
 	children: ReactNode;
-	components?: InAppMessageComponents;
 	style?: InAppMessageComponentStyles;
 };

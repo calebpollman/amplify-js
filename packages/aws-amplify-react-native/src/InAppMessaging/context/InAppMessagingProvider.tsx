@@ -19,7 +19,7 @@ import { InAppMessagingProviderProps } from './types';
 
 const { InAppMessaging } = Notifications;
 
-export default function InAppMessagingProvider({ children, components = {}, style = {} }: InAppMessagingProviderProps) {
+export default function InAppMessagingProvider({ children, style }: InAppMessagingProviderProps) {
 	const [inAppMessage, setInAppMessage] = useState<InAppMessage>(null);
 
 	useEffect(() => {
@@ -37,7 +37,6 @@ export default function InAppMessagingProvider({ children, components = {}, styl
 		<InAppMessagingContext.Provider
 			value={{
 				clearInAppMessage,
-				components,
 				displayInAppMessage: setInAppMessage,
 				inAppMessage,
 				style,

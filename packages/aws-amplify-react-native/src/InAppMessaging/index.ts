@@ -21,11 +21,12 @@ export {
 export {
 	BannerMessage,
 	BannerMessageProps,
+	CarouselMessage,
 	CarouselMessageProps,
 	FullScreenMessage,
 	FullScreenMessageProps,
+	ModalMessage,
+	ModalMessageProps,
 	InAppMessageDisplay,
-	InAppMessageComponentStyle,
-	InAppMessageComponentStyles,
 } from './components';
 export { useInAppMessaging } from './hooks';

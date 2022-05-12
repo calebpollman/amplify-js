@@ -15,6 +15,7 @@ import { ConsoleLogger as Logger } from '@aws-amplify/core';
 import { Notifications, InAppMessageInteractionEvent } from '@aws-amplify/notifications';
 import isNil from 'lodash/isNil';
 
+import { InAppMessageComponents } from '../../../context';
 import { useInAppMessaging } from '../../../hooks';
 
 import DefaultBannerMessage, { BannerMessageProps } from '../../BannerMessage';
@@ -35,11 +36,11 @@ const logger = new Logger('Notifications.InAppMessaging');
  *
  * @returns {object} contains the message UI component and props
  */
-export default function useMessage(): {
+export default function useMessage({ components }: { components: InAppMessageComponents }): {
 	Component: InAppMessageComponent;
 	props: InAppMessageComponentCommonProps;
 } {
-	const { clearInAppMessage, components, inAppMessage, style } = useInAppMessaging();
+	const { clearInAppMessage, inAppMessage, style } = useInAppMessaging();
 	const {
 		BannerMessage = DefaultBannerMessage,
 		CarouselMessage = DefaultCarouselMessage,

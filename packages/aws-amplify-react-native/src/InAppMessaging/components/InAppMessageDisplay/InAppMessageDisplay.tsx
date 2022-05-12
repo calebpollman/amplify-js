@@ -15,9 +15,10 @@ import React from 'react';
 import isNil from 'lodash/isNil';
 
 import { useMessage } from '../hooks';
+import { InAppMessageComponents } from '../../context';
 
-export default function InAppMessageDisplay() {
-	const { Component, props } = useMessage();
+export default function InAppMessageDisplay({ components }: { components: InAppMessageComponents }) {
+	const { Component, props } = useMessage({ components });
 
 	return !isNil(Component) ? <Component {...props} /> : null;
 }

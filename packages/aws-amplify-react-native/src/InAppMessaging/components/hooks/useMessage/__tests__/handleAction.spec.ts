@@ -16,8 +16,6 @@ import { InAppMessageAction } from '@aws-amplify/notifications';
 
 import handleAction from '../handleAction';
 
-jest.mock('react-native', () => ({ Linking: { canOpenURL: jest.fn(), openURL: jest.fn() } }));
-
 // use empty mockImplementation to turn off console output
 const infoSpy = jest.spyOn(Logger.prototype, 'info').mockImplementation();
 const warnSpy = jest.spyOn(Logger.prototype, 'warn').mockImplementation();

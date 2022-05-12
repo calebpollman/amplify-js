@@ -125,21 +125,21 @@ describe('InAppMessagingProvider', () => {
 		expect(consumer.props.inAppMessage).toBeNull();
 	});
 
-	it('vends custom components received as props', () => {
-		function BannerMessage(_) {
-			return null;
-		}
+	// it('vends custom components received as props', () => {
+	// function BannerMessage(_) {
+	// return null;
+	// }
 
-		renderer.update(
-			<InAppMessagingProvider components={{ BannerMessage }}>
-				<TestComponent />
-			</InAppMessagingProvider>
-		);
+	// renderer.update(
+	// <InAppMessagingProvider components={{ BannerMessage }}>
+	// <TestComponent />
+	// </InAppMessagingProvider>
+	// );
 
-		const consumer = renderer.root.findByType(ChildComponent);
+	// const consumer = renderer.root.findByType(ChildComponent);
 
-		expect((consumer.props as InAppMessagingContextType).components.BannerMessage).toBe(BannerMessage);
-	});
+	// expect((consumer.props as InAppMessagingContextType).components.BannerMessage).toBe(BannerMessage);
+	// });
 
 	it('vends custom style received as props', () => {
 		const style = { BannerMessage: { container: { backgroundColor: 'lavenderblush' } } };
