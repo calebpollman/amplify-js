@@ -18,10 +18,10 @@ import isNil from 'lodash/isNil';
 import { InAppMessageComponents } from '../../../context';
 import { useInAppMessaging } from '../../../hooks';
 
-import DefaultBannerMessage, { BannerMessageProps } from '../../BannerMessage';
-import DefaultCarouselMessage, { CarouselMessageProps } from '../../CarouselMessage';
-import DefaultFullScreenMessage, { FullScreenMessageProps } from '../../FullScreenMessage';
-import DefaultModalMessage, { ModalMessageProps } from '../../ModalMessage';
+import { BannerMessageProps } from '../../BannerMessage';
+import { CarouselMessageProps } from '../../CarouselMessage';
+import { FullScreenMessageProps } from '../../FullScreenMessage';
+import { ModalMessageProps } from '../../ModalMessage';
 import { InAppMessageComponentCommonProps } from '../../types';
 
 import { InAppMessageComponent } from './types';
@@ -41,12 +41,7 @@ export default function useMessage({ components }: { components: InAppMessageCom
 	props: InAppMessageComponentCommonProps;
 } {
 	const { clearInAppMessage, inAppMessage, style } = useInAppMessaging();
-	const {
-		BannerMessage = DefaultBannerMessage,
-		CarouselMessage = DefaultCarouselMessage,
-		FullScreenMessage = DefaultFullScreenMessage,
-		ModalMessage = DefaultModalMessage,
-	} = components;
+	const { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage } = components;
 
 	if (isNil(inAppMessage)) {
 		return { Component: null, props: null };

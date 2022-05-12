@@ -17,8 +17,28 @@ import isNil from 'lodash/isNil';
 import { useMessage } from '../hooks';
 import { InAppMessageComponents } from '../../context';
 
-export default function InAppMessageDisplay({ components }: { components: InAppMessageComponents }) {
+import BannerMessage from '../BannerMessage';
+import FullScreenMessage from '../FullScreenMessage';
+import CarouselMessage from '../CarouselMessage';
+import ModalMessage from '../ModalMessage';
+
+interface InAppMessageDisplayProps {
+	components?: InAppMessageComponents;
+}
+
+function InAppMessageDisplay({ components }: InAppMessageDisplayProps) {
 	const { Component, props } = useMessage({ components });
 
 	return !isNil(Component) ? <Component {...props} /> : null;
 }
+
+function getInAppMessageDisplay({ components: platformComponents }: InAppMessageDisplayProps) {
+	console.log('Call Me Once');
+	return function Idk(props: InAppMessageDisplayProps) {
+		return <InAppMessageDisplay {...props} components={{ ...props?.components, ...platformComponents }} />;
+	};
+}
+
+const Idk = getInAppMessageDisplay({ components: { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage } });
+
+export default Idk;
