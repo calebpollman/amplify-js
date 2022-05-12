@@ -14,6 +14,8 @@
 import React from 'react';
 import isNil from 'lodash/isNil';
 
+import { InAppMessageAction } from '@aws-amplify/notifications';
+
 import { useMessage } from '../hooks';
 import { InAppMessageComponents } from '../../context';
 
@@ -22,23 +24,45 @@ import FullScreenMessage from '../FullScreenMessage';
 import CarouselMessage from '../CarouselMessage';
 import ModalMessage from '../ModalMessage';
 
+import handleAction from '../hooks/useMessage/handleAction';
+import handleLinkAction from '../hooks/useMessage/handleLinkAction';
+
+type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
+
 interface InAppMessageDisplayProps {
 	components?: InAppMessageComponents;
+	// could make this its own type and exclude from InAppMessageDisplayProps
+	// to prevent exposing to users
+	onMessageAction?: OnMessageAction;
 }
 
-function InAppMessageDisplay({ components }: InAppMessageDisplayProps) {
-	const { Component, props } = useMessage({ components });
-
+function InAppMessageDisplayInternal({ components, onMessageAction }: InAppMessageDisplayProps) {
+	const { Component, props } = useMessage({ components, onMessageAction });
 	return !isNil(Component) ? <Component {...props} /> : null;
 }
 
-function getInAppMessageDisplay({ components: platformComponents }: InAppMessageDisplayProps) {
-	console.log('Call Me Once');
-	return function Idk(props: InAppMessageDisplayProps) {
-		return <InAppMessageDisplay {...props} components={{ ...props?.components, ...platformComponents }} />;
+function getInAppMessageDisplay({
+	components: defaultComponents,
+	onMessageAction: defaultOnMessageAction,
+}: InAppMessageDisplayProps) {
+	return function InAppMessageDisplay({
+		components: overrideComponents,
+		onMessageAction: overrideOnMessageAction,
+		...props
+	}: InAppMessageDisplayProps) {
+		const components = React.useMemo(() => ({ ...defaultComponents, ...overrideComponents }), [overrideComponents]);
+		const onMessageAction =
+			typeof overrideOnMessageAction === 'function' ? overrideOnMessageAction : defaultOnMessageAction;
+
+		return <InAppMessageDisplayInternal {...props} components={components} onMessageAction={onMessageAction} />;
 	};
 }
 
-const Idk = getInAppMessageDisplay({ components: { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage } });
+const InAppMessageDisplay = getInAppMessageDisplay({
+	components: { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage },
+	onMessageAction: ({ action, url }) => {
+		handleAction({ action, url, handleLinkAction });
+	},
+});
 
-export default Idk;
+export default InAppMessageDisplay;

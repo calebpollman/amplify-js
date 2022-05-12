@@ -23,6 +23,7 @@ const handleLinkAction: HandleLinkAction = async (url: string) => {
 	try {
 		supported = await Linking.canOpenURL(url);
 	} catch (e) {
+		// consider changing to .warn, end used can close via icon
 		logger.error(`Call to Linking.canOpenURL failed: ${e}`);
 	}
 
@@ -35,6 +36,7 @@ const handleLinkAction: HandleLinkAction = async (url: string) => {
 		logger.info(`Opening url: ${url}`);
 		await Linking.openURL(url);
 	} catch (e) {
+		// consider changing to .warn, end used can close via icon
 		logger.error(`Call to Linking.openURL failed: ${e}`);
 	}
 };

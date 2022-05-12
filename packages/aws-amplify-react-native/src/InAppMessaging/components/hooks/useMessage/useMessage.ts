@@ -12,7 +12,7 @@
  */
 
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
-import { Notifications, InAppMessageInteractionEvent } from '@aws-amplify/notifications';
+import { Notifications, InAppMessageInteractionEvent, InAppMessageAction } from '@aws-amplify/notifications';
 import isNil from 'lodash/isNil';
 
 import { InAppMessageComponents } from '../../../context';
@@ -27,6 +27,8 @@ import { InAppMessageComponentCommonProps } from '../../types';
 import { InAppMessageComponent } from './types';
 import { getContentProps, getPositionProp } from './utils';
 
+type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
+
 const { InAppMessaging } = Notifications;
 
 const logger = new Logger('Notifications.InAppMessaging');
@@ -36,7 +38,13 @@ const logger = new Logger('Notifications.InAppMessaging');
  *
  * @returns {object} contains the message UI component and props
  */
-export default function useMessage({ components }: { components: InAppMessageComponents }): {
+export default function useMessage({
+	components,
+	onMessageAction,
+}: {
+	components: InAppMessageComponents;
+	onMessageAction: OnMessageAction;
+}): {
 	Component: InAppMessageComponent;
 	props: InAppMessageComponentCommonProps;
 } {
@@ -68,7 +76,7 @@ export default function useMessage({ components }: { components: InAppMessageCom
 		case 'MIDDLE_BANNER':
 		case 'TOP_BANNER': {
 			const props: BannerMessageProps = {
-				...getContentProps(content?.[0], onActionCallback),
+				...getContentProps(content?.[0], onMessageAction, onActionCallback),
 				layout,
 				onClose,
 				onDisplay,
@@ -79,7 +87,7 @@ export default function useMessage({ components }: { components: InAppMessageCom
 		}
 		case 'CAROUSEL': {
 			const props: CarouselMessageProps = {
-				data: content?.map((item) => getContentProps(item, onActionCallback)),
+				data: content?.map((item) => getContentProps(item, onMessageAction, onActionCallback)),
 				layout,
 				onClose,
 				onDisplay,
@@ -89,7 +97,7 @@ export default function useMessage({ components }: { components: InAppMessageCom
 		}
 		case 'FULL_SCREEN': {
 			const props: FullScreenMessageProps = {
-				...getContentProps(content?.[0], onActionCallback),
+				...getContentProps(content?.[0], onMessageAction, onActionCallback),
 				layout,
 				onClose,
 				onDisplay,
@@ -99,7 +107,7 @@ export default function useMessage({ components }: { components: InAppMessageCom
 		}
 		case 'MODAL': {
 			const props: ModalMessageProps = {
-				...getContentProps(content?.[0], onActionCallback),
+				...getContentProps(content?.[0], onMessageAction, onActionCallback),
 				layout,
 				onClose,
 				onDisplay,

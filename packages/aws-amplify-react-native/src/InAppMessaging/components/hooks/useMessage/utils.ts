@@ -25,10 +25,9 @@ import {
 	InAppMessageComponentPosition,
 } from '../../types';
 
-import handleAction from './handleAction';
-import handleLinkAction from './handleLinkAction';
-
 const logger = new Logger('Notifications.InAppMessaging');
+
+type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
 
 export const getPositionProp = (layout: InAppMessageLayout): InAppMessageComponentPosition => {
 	switch (layout) {
@@ -48,12 +47,13 @@ export const getPositionProp = (layout: InAppMessageLayout): InAppMessageCompone
 };
 
 export const getActionHandler = (
-	{ action, url }: { action: InAppMessageAction; url?: string },
+	actionParams: { action: InAppMessageAction; url?: string },
+	onMessageAction: OnMessageAction,
 	onActionCallback: () => void
 ) => ({
 	onAction() {
 		try {
-			handleAction({ action, handleLinkAction, url });
+			onMessageAction(actionParams);
 		} catch (e) {
 			logger.error(`handleAction failure: ${e}`);
 		} finally {
@@ -64,14 +64,16 @@ export const getActionHandler = (
 
 const getButtonProps = (
 	{ action, url, ...baseButtonProps }: InAppMessageButton,
+	onMessageAction: OnMessageAction,
 	onActionCallback: () => void
 ): InAppMessageComponentButtonProps => ({
 	...baseButtonProps,
-	...getActionHandler({ action, url }, onActionCallback),
+	...getActionHandler({ action, url }, onMessageAction, onActionCallback),
 });
 
 export const getContentProps = (
 	content: InAppMessageContent,
+	onMessageAction: OnMessageAction,
 	onActionCallback: () => void
 ): InAppMessageComponentContentProps => {
 	const props: InAppMessageComponentContentProps = {};
@@ -83,11 +85,11 @@ export const getContentProps = (
 	const { primaryButton, secondaryButton, ...restContent } = content;
 
 	if (primaryButton) {
-		props.primaryButton = getButtonProps(primaryButton, onActionCallback);
+		props.primaryButton = getButtonProps(primaryButton, onMessageAction, onActionCallback);
 	}
 
 	if (secondaryButton) {
-		props.secondaryButton = getButtonProps(secondaryButton, onActionCallback);
+		props.secondaryButton = getButtonProps(secondaryButton, onMessageAction, onActionCallback);
 	}
 
 	return { ...props, ...restContent };
