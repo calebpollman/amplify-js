@@ -65,10 +65,9 @@ describe('InAppMessagingProvider', () => {
 	it('vends the expected initial context values', () => {
 		const expectedProps = {
 			clearInAppMessage: expect.any(Function) as InAppMessagingContextType['clearInAppMessage'],
-			components: {},
 			displayInAppMessage: expect.any(Function) as InAppMessagingContextType['displayInAppMessage'],
 			inAppMessage: null,
-			style: {},
+			style: undefined,
 		};
 
 		expect(renderer.root.findByType(ChildComponent).props).toEqual(expectedProps);
