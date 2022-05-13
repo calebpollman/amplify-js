@@ -55,7 +55,7 @@ export const getActionHandler = (
 		try {
 			onMessageAction(actionParams);
 		} catch (e) {
-			logger.error(`handleAction failure: ${e}`);
+			logger.error(`Message action failure: ${e}`);
 		} finally {
 			onActionCallback?.();
 		}

@@ -15,12 +15,12 @@ import { InAppMessageButton, InAppMessageContent, InAppMessageLayout } from '@aw
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 import { getActionHandler, getContentProps, getPositionProp } from '../utils';
 
-import handleAction from '../handleAction';
-
 jest.mock('../handleAction', () => ({ __esModule: true, default: jest.fn() }));
 
 // use empty mockImplementation to turn off console output
 const errorSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();
+
+const onMessageAction = jest.fn();
 
 const baseContent: InAppMessageContent = {
 	container: { style: { backgroundColor: 'purple' } },
@@ -57,12 +57,12 @@ describe('getPositionProp', () => {
 
 describe('getContentProps', () => {
 	it('returns the expected output in the happy path', () => {
-		const output = getContentProps(baseContent, onActionCallback);
+		const output = getContentProps(baseContent, onMessageAction, onActionCallback);
 		expect(output).toStrictEqual(baseContent);
 	});
 
 	it('returns the expected output when a primary button is provided', () => {
-		const output = getContentProps({ ...baseContent, primaryButton }, onActionCallback);
+		const output = getContentProps({ ...baseContent, primaryButton }, onMessageAction, onActionCallback);
 		expect(output).toStrictEqual({
 			...baseContent,
 			primaryButton: {
@@ -73,7 +73,7 @@ describe('getContentProps', () => {
 	});
 
 	it('returns the expected output when a secondary button is provided', () => {
-		const output = getContentProps({ ...baseContent, secondaryButton }, onActionCallback);
+		const output = getContentProps({ ...baseContent, secondaryButton }, onMessageAction, onActionCallback);
 		expect(output).toStrictEqual({
 			...baseContent,
 			secondaryButton: {
@@ -84,7 +84,7 @@ describe('getContentProps', () => {
 	});
 
 	it('returns an empty props object when content is null', () => {
-		const output = getContentProps(null, onActionCallback);
+		const output = getContentProps(null, onMessageAction, onActionCallback);
 		expect(output).toStrictEqual({});
 	});
 });
@@ -95,27 +95,28 @@ describe('getActionHandler', () => {
 	});
 
 	it('behaves as expected in the happy path', () => {
-		const actionHandler = getActionHandler({ ...secondaryButton }, onActionCallback);
+		const actionHandler = getActionHandler({ ...secondaryButton }, onMessageAction, onActionCallback);
 
 		actionHandler.onAction();
 
-		expect(handleAction).toHaveBeenCalledTimes(1);
+		expect(onMessageAction).toHaveBeenCalledTimes(1);
 		expect(onActionCallback).toHaveBeenCalledTimes(1);
 	});
 
 	it('behaves as expected when handleAction results in an error', () => {
 		const error = 'ERROR';
-		(handleAction as jest.Mock).mockImplementationOnce(() => {
+
+		onMessageAction.mockImplementationOnce(() => {
 			throw new Error(error);
 		});
 
-		const actionHandler = getActionHandler({ ...secondaryButton }, onActionCallback);
+		const actionHandler = getActionHandler({ ...secondaryButton }, onMessageAction, onActionCallback);
 
 		actionHandler.onAction();
 
-		expect(handleAction).toHaveBeenCalledTimes(1);
+		expect(onMessageAction).toHaveBeenCalledTimes(1);
 		expect(errorSpy).toHaveBeenCalledTimes(1);
-		expect(errorSpy).toHaveBeenCalledWith(`handleAction failure: Error: ${error}`);
+		expect(errorSpy).toHaveBeenCalledWith(`Message action failure: Error: ${error}`);
 		expect(onActionCallback).toHaveBeenCalledTimes(1);
 	});
 });

@@ -15,10 +15,11 @@ import { InAppMessage, InAppMessageInteractionEvent, Notifications } from '@aws-
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 
 import useInAppMessaging from '../../../../hooks/useInAppMessaging';
-import BannerMessage, { BannerMessageProps } from '../../../BannerMessage';
-import CarouselMessage from '../../../CarouselMessage';
-import FullScreenMessage from '../../../FullScreenMessage';
-import ModalMessage from '../../../ModalMessage';
+// import BannerMessage, { BannerMessageProps } from '../../../BannerMessage';
+import { BannerMessageProps } from '../../../BannerMessage';
+// import CarouselMessage from '../../../CarouselMessage';
+// import FullScreenMessage from '../../../FullScreenMessage';
+// import ModalMessage from '../../../ModalMessage';
 import { InAppMessageComponentBaseProps } from '../../../types';
 
 import useMessage from '../useMessage';
@@ -48,18 +49,21 @@ const carouselInAppMessage: Partial<InAppMessage> = {
 	layout: 'CAROUSEL',
 };
 
-function CustomBannerMessage() {
+function BannerMessage() {
 	return null;
 }
-function CustomCarouselMessage() {
+function CarouselMessage() {
 	return null;
 }
-function CustomFullScreenMessage() {
+function FullScreenMessage() {
 	return null;
 }
-function CustomModalMessage() {
+function ModalMessage() {
 	return null;
 }
+
+const onMessageAction = jest.fn();
+const components = { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage };
 
 describe('useMessage', () => {
 	beforeEach(() => {
@@ -74,8 +78,9 @@ describe('useMessage', () => {
 		['TOP_BANNER', BannerMessage, { position: 'top' }],
 		['MODAL', ModalMessage, null],
 	])('returns the expected values of Component and props for a %s layout', (layout, layoutComponent, layoutProps) => {
-		mockUseInAppMessaging.mockReturnValueOnce({ components: {}, inAppMessage: { ...baseInAppMessage, layout } });
-		const { Component, props } = useMessage();
+		// mockUseInAppMessaging.mockReturnValueOnce({ components: {}, inAppMessage: { ...baseInAppMessage, layout } });
+		mockUseInAppMessaging.mockReturnValueOnce({ inAppMessage: { ...baseInAppMessage, layout } });
+		const { Component, props } = useMessage({ components, onMessageAction });
 
 		expect(Component).toBe(layoutComponent);
 		expect(props).toEqual(
@@ -93,7 +98,7 @@ describe('useMessage', () => {
 	it('returns the expected values of Component and props for a CAROUSEL layout', () => {
 		mockUseInAppMessaging.mockReturnValueOnce({ components: {}, inAppMessage: carouselInAppMessage });
 
-		const { Component, props } = useMessage();
+		const { Component, props } = useMessage({ components, onMessageAction });
 
 		expect(Component).toBe(CarouselMessage);
 		expect(props).toEqual(
@@ -107,31 +112,31 @@ describe('useMessage', () => {
 		);
 	});
 
-	it.each([
-		['BannerMessage', 'BOTTOM_BANNER', CustomBannerMessage],
-		['BannerMessage', 'MIDDLE_BANNER', CustomBannerMessage],
-		['BannerMessage', 'TOP_BANNER', CustomBannerMessage],
-		['CarouselMessage', 'CAROUSEL', CustomCarouselMessage],
-		['FullScreenMessage', 'FULL_SCREEN', CustomFullScreenMessage],
-		['ModalMessage', 'MODAL', CustomModalMessage],
-	])(
-		'returns a custom %s component for a %s layout in place of the default component when provided',
-		(componentKey, layout, CustomComponent) => {
-			mockUseInAppMessaging.mockReturnValueOnce({
-				components: { [componentKey]: CustomComponent },
-				inAppMessage: { layout },
-			});
+	// it.each([
+	// ['BannerMessage', 'BOTTOM_BANNER', CustomBannerMessage],
+	// ['BannerMessage', 'MIDDLE_BANNER', CustomBannerMessage],
+	// ['BannerMessage', 'TOP_BANNER', CustomBannerMessage],
+	// ['CarouselMessage', 'CAROUSEL', CustomCarouselMessage],
+	// ['FullScreenMessage', 'FULL_SCREEN', CustomFullScreenMessage],
+	// ['ModalMessage', 'MODAL', CustomModalMessage],
+	// ])(
+	// 'returns a custom %s component for a %s layout in place of the default component when provided',
+	// (componentKey, layout, CustomComponent) => {
+	// mockUseInAppMessaging.mockReturnValueOnce({
+	// components: { [componentKey]: CustomComponent },
+	// inAppMessage: { layout },
+	// });
 
-			const { Component } = useMessage();
+	// const { Component } = useMessage();
 
-			expect(Component).toBe(CustomComponent);
-		}
-	);
+	// expect(Component).toBe(CustomComponent);
+	// }
+	// );
 
 	it('returns null values for Component and props when inAppMessage is null', () => {
 		mockUseInAppMessaging.mockReturnValueOnce({ components: {}, inAppMessage: null });
 
-		const { Component, props } = useMessage();
+		const { Component, props } = useMessage({ components, onMessageAction });
 
 		expect(Component).toBeNull();
 		expect(props).toBeNull();
@@ -144,7 +149,7 @@ describe('useMessage', () => {
 			inAppMessage: { layout },
 		});
 
-		const { Component, props } = useMessage();
+		const { Component, props } = useMessage({ components, onMessageAction });
 
 		expect(infoSpy).toHaveBeenCalledWith(`Received unknown InAppMessage layout: ${layout}`);
 		expect(infoSpy).toHaveBeenCalledTimes(1);
@@ -171,7 +176,7 @@ describe('useMessage', () => {
 
 		describe('onClose', () => {
 			it('calls the expected methods', () => {
-				const { props } = useMessage();
+				const { props } = useMessage({ components, onMessageAction });
 
 				props.onClose();
 
@@ -186,7 +191,7 @@ describe('useMessage', () => {
 
 		describe('onDisplay', () => {
 			it('calls the expected methods', () => {
-				const { props } = useMessage();
+				const { props } = useMessage({ components, onMessageAction });
 
 				props.onDisplay();
 
@@ -200,7 +205,7 @@ describe('useMessage', () => {
 
 		describe('onActionCallback', () => {
 			it('calls the expected methods via the onPress function of the primary button', () => {
-				const { props } = useMessage();
+				const { props } = useMessage({ components, onMessageAction });
 
 				(props as BannerMessageProps).primaryButton.onAction();
 
