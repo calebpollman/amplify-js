@@ -22,7 +22,7 @@ import { BannerMessageProps } from '../../BannerMessage';
 import { CarouselMessageProps } from '../../CarouselMessage';
 import { FullScreenMessageProps } from '../../FullScreenMessage';
 import { ModalMessageProps } from '../../ModalMessage';
-import { InAppMessageComponentCommonProps } from '../../types';
+import { InAppMessageComponentCommonProps, InAppMessageComponentStyles } from '../../types';
 
 import { InAppMessageComponent } from './types';
 import { getContentProps, getPositionProp } from './utils';
@@ -41,14 +41,16 @@ const logger = new Logger('Notifications.InAppMessaging');
 export default function useMessage({
 	components,
 	onMessageAction,
+	styles,
 }: {
 	components: InAppMessageComponents;
 	onMessageAction: OnMessageAction;
+	styles: InAppMessageComponentStyles;
 }): {
 	Component: InAppMessageComponent;
 	props: InAppMessageComponentCommonProps;
 } {
-	const { clearInAppMessage, inAppMessage, style } = useInAppMessaging();
+	const { clearInAppMessage, inAppMessage } = useInAppMessaging();
 	const { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage } = components;
 
 	if (isNil(inAppMessage)) {
@@ -81,7 +83,7 @@ export default function useMessage({
 				onClose,
 				onDisplay,
 				position: getPositionProp(layout),
-				style: style?.BannerMessage,
+				style: styles?.BannerMessage,
 			};
 			return { Component: BannerMessage, props };
 		}
@@ -91,7 +93,7 @@ export default function useMessage({
 				layout,
 				onClose,
 				onDisplay,
-				style: style?.CarouselMessage,
+				style: styles?.CarouselMessage,
 			};
 			return { Component: CarouselMessage, props };
 		}
@@ -101,7 +103,7 @@ export default function useMessage({
 				layout,
 				onClose,
 				onDisplay,
-				style: style?.FullScreenMessage,
+				style: styles?.FullScreenMessage,
 			};
 			return { Component: FullScreenMessage, props };
 		}
@@ -111,7 +113,7 @@ export default function useMessage({
 				layout,
 				onClose,
 				onDisplay,
-				style: style?.ModalMessage,
+				style: styles?.ModalMessage,
 			};
 			return { Component: ModalMessage, props };
 		}

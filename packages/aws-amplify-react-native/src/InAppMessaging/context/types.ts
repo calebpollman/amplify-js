@@ -11,27 +11,24 @@
  * and limitations under the License.
  */
 
-import { ReactNode, ReactElement } from 'react';
+import { ReactNode } from 'react';
 import { InAppMessage } from '@aws-amplify/notifications';
 
 import { BannerMessageProps, CarouselMessageProps, FullScreenMessageProps, ModalMessageProps } from '../components';
-import { InAppMessageComponentStyles } from '../components/types';
 
 export type InAppMessageComponents = {
-	BannerMessage?: (props: BannerMessageProps) => ReactElement;
-	CarouselMessage?: (props: CarouselMessageProps) => ReactElement;
-	FullScreenMessage?: (props: FullScreenMessageProps) => ReactElement;
-	ModalMessage?: (props: ModalMessageProps) => ReactElement;
+	BannerMessage?: (props: BannerMessageProps) => JSX.Element;
+	CarouselMessage?: (props: CarouselMessageProps) => JSX.Element;
+	FullScreenMessage?: (props: FullScreenMessageProps) => JSX.Element;
+	ModalMessage?: (props: ModalMessageProps) => JSX.Element;
 };
 
 export type InAppMessagingContextType = {
 	clearInAppMessage: () => void;
 	displayInAppMessage: (inAppMessage: InAppMessage) => void;
 	inAppMessage: InAppMessage;
-	style: InAppMessageComponentStyles;
 };
 
 export type InAppMessagingProviderProps = {
 	children: ReactNode;
-	style?: InAppMessageComponentStyles;
 };
