@@ -140,17 +140,17 @@ describe('InAppMessagingProvider', () => {
 	// expect((consumer.props as InAppMessagingContextType).components.BannerMessage).toBe(BannerMessage);
 	// });
 
-	it('vends custom style received as props', () => {
-		const style = { BannerMessage: { container: { backgroundColor: 'lavenderblush' } } };
+	// it('vends custom style received as props', () => {
+	// const style = { BannerMessage: { container: { backgroundColor: 'lavenderblush' } } };
 
-		renderer.update(
-			<InAppMessagingProvider style={style}>
-				<TestComponent />
-			</InAppMessagingProvider>
-		);
+	// renderer.update(
+	// <InAppMessagingProvider style={style}>
+	// <TestComponent />
+	// </InAppMessagingProvider>
+	// );
 
-		const consumer = renderer.root.findByType(ChildComponent);
+	// const consumer = renderer.root.findByType(ChildComponent);
 
-		expect((consumer.props as InAppMessagingContextType).style).toBe(style);
-	});
+	// expect((consumer.props as InAppMessagingContextType).style).toBe(style);
+	// });
 });
