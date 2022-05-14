@@ -11,21 +11,33 @@
  * and limitations under the License.
  */
 
+import React from 'react';
+import isNil from 'lodash/isNil';
+
 import BannerMessage from '../BannerMessage';
 import FullScreenMessage from '../FullScreenMessage';
 import CarouselMessage from '../CarouselMessage';
 import ModalMessage from '../ModalMessage';
 
+import { useMessage, OnMessageAction } from '../hooks/useMessage';
 import handleAction from '../hooks/useMessage/handleAction';
 import handleLinkAction from '../hooks/useMessage/handleLinkAction';
 
-import getInAppMessageDisplay from './getInAppMessageDisplay';
+import { MessageStyleProps } from '../hooks/useMessageProps';
 
-const InAppMessageDisplay = getInAppMessageDisplay({
-	components: { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage },
-	onMessageAction: ({ action, url }) => {
-		handleAction({ action, url, handleLinkAction });
-	},
-});
+import { InAppMessageDisplayProps } from './types';
+
+const platformComponents = { BannerMessage, FullScreenMessage, CarouselMessage, ModalMessage };
+
+const onMessageAction: OnMessageAction = ({ action, url }) => {
+	handleAction({ action, url, handleLinkAction });
+};
+
+function InAppMessageDisplay({ components: overrideComponents, styles }: InAppMessageDisplayProps<MessageStyleProps>) {
+	const components = React.useMemo(() => ({ ...platformComponents, ...overrideComponents }), [overrideComponents]);
+	const { Component, props } = useMessage({ components, onMessageAction, styles });
+
+	return !isNil(Component) ? <Component {...props} /> : null;
+}
 
 export default InAppMessageDisplay;

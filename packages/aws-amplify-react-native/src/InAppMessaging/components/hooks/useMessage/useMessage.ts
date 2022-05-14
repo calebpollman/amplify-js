@@ -17,7 +17,7 @@ import isNil from 'lodash/isNil';
 
 import { useInAppMessaging } from '../../../hooks';
 
-import { UseMessage, UseMessageProps } from './types';
+import { CarouselMessageCommonProps, UseMessage, UseMessageProps } from './types';
 import { getContentProps, getPositionProp } from './utils';
 
 const { InAppMessaging } = Notifications;
@@ -72,7 +72,7 @@ export default function useMessage<Style>({
 			return { Component: BannerMessage, props };
 		}
 		case 'CAROUSEL': {
-			const props = {
+			const props: CarouselMessageCommonProps<Style> = {
 				data: content?.map((item) => getContentProps(item, onMessageAction, onActionCallback)),
 				layout,
 				onClose,

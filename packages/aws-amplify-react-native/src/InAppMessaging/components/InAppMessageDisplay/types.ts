@@ -11,28 +11,16 @@
  * and limitations under the License.
  */
 
-import { InAppMessageAction } from '@aws-amplify/notifications';
-import { InAppMessageComponents } from '../../context';
-import { InAppMessageComponentStyles } from '../types';
+import { MessageComponents, MessageComponentStyles } from '../hooks/useMessage';
 
-export type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
-
-export interface InAppMessageDisplayInternalProps {
+export interface InAppMessageDisplayProps<Style> {
 	/**
-	 * Platform Message UI components
+	 * Message UI components
 	 */
-	components: InAppMessageComponents;
-
-	/**
-	 * Platform Message action handler
-	 */
-	onMessageAction: OnMessageAction;
+	components?: MessageComponents<Style>;
 
 	/**
 	 * Platform Message override styles
 	 */
-	styles: InAppMessageComponentStyles; // make generic
+	styles?: MessageComponentStyles<Style>;
 }
-
-export type GetInAppMessageDisplayProps = Pick<InAppMessageDisplayInternalProps, 'components' | 'onMessageAction'>;
-export type InAppMessageDisplayProps = Partial<Pick<InAppMessageDisplayInternalProps, 'components' | 'styles'>>;

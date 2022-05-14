@@ -29,34 +29,47 @@ export type MessageContentProps = Omit<InAppMessageContent, 'primaryButton' | 's
 // props common to each Message component
 type MessageCommonProps<Style> = {
 	layout: InAppMessageLayout;
-	onClose: () => void;
-	onDisplay: () => void;
-	style: Style;
+	onClose?: () => void;
+	onDisplay?: () => void;
+	style?: Style;
 };
 
 export type MessageComponentPosition = 'bottom' | 'middle' | 'top' | null;
 
 // Banner requires a `position` prop
 export type BannerMessageCommonProps<Style> = MessageCommonProps<Style> &
-	MessageContentProps & { position: MessageComponentPosition };
+	MessageContentProps & { position?: MessageComponentPosition };
 // Carousel message nests content props in its `data` prop
-export type CarouselMessageCommonProps<Style> = MessageCommonProps<Style> & { data: MessageContentProps[] };
+export type CarouselMessageCommonProps<Style> = MessageCommonProps<Style> & { data?: MessageContentProps[] };
 export type FullScreenMessageCommonProps<Style> = MessageCommonProps<Style> & MessageContentProps;
 export type ModalMessageCommonProps<Style> = MessageCommonProps<Style> & MessageContentProps;
-
-type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
 
 type BannerMessage<Style> = (props: BannerMessageCommonProps<Style>) => JSX.Element;
 type CarouselMessage<Style> = (props: CarouselMessageCommonProps<Style>) => JSX.Element;
 type FullScreenMessage<Style> = (props: FullScreenMessageCommonProps<Style>) => JSX.Element;
 type ModalMessage<Style> = (props: ModalMessageCommonProps<Style>) => JSX.Element;
 
-type MessageComponents<Style> = {
+export type MessageComponents<Style> = {
 	BannerMessage: BannerMessage<Style>;
 	CarouselMessage: CarouselMessage<Style>;
 	FullScreenMessage: FullScreenMessage<Style>;
 	ModalMessage: ModalMessage<Style>;
 };
+
+export type MessageComponentStyles<Style> = {
+	bannerMessage: Style;
+	carouselMessage: Style;
+	fullScreenMessage: Style;
+	modalMessage: Style;
+};
+
+export type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
+
+export interface UseMessageProps<Style> {
+	components: MessageComponents<Style>;
+	onMessageAction: OnMessageAction;
+	styles: MessageComponentStyles<Style>;
+}
 
 type MessageComponent<Style> =
 	| BannerMessage<Style>
@@ -69,18 +82,5 @@ type MessageProps<Style> =
 	| CarouselMessageCommonProps<Style>
 	| FullScreenMessageCommonProps<Style>
 	| ModalMessageCommonProps<Style>;
-
-type MessageComponentStyles<Style> = {
-	bannerMessage: Style;
-	carouselMessage: Style;
-	fullScreenMessage: Style;
-	modalMessage: Style;
-};
-
-export interface UseMessageProps<Style> {
-	components: MessageComponents<Style>;
-	onMessageAction: OnMessageAction;
-	styles: MessageComponentStyles<Style>;
-}
 
 export type UseMessage<Style> = { Component: MessageComponent<Style>; props: MessageProps<Style> };

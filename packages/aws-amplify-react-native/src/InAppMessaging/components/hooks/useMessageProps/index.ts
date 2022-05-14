@@ -1,2 +1,2 @@
 export { default } from './useMessageProps';
-export { UseMessageProps } from './types';
+export { MessageStyleProps, UseMessageProps } from './types';

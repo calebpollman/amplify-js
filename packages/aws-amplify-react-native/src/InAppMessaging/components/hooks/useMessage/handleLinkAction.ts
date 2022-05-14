@@ -14,10 +14,9 @@
 import { Linking } from 'react-native';
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 
-import { HandleLinkAction } from './types';
-
 const logger = new Logger('Notifications.InAppMessaging');
 
+type HandleLinkAction = (url: string) => Promise<void>;
 const handleLinkAction: HandleLinkAction = async (url: string) => {
 	let supported: boolean;
 	try {

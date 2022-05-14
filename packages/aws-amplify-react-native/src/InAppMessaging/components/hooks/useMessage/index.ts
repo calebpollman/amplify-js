@@ -11,5 +11,5 @@
  * and limitations under the License.
  */
 
-export { default } from './useMessage';
-export { InAppMessageComponentProps } from './types';
+export { default as useMessage } from './useMessage';
+export { MessageComponents, MessageComponentStyles, OnMessageAction } from './types';
