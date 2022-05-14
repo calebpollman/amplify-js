@@ -84,3 +84,10 @@ type MessageProps<Style> =
 	| ModalMessageCommonProps<Style>;
 
 export type UseMessage<Style> = { Component: MessageComponent<Style>; props: MessageProps<Style> };
+
+export type HandleMessageLinkAction = (url: string) => Promise<void>;
+export type HandleMessageActionParams = {
+	action: string;
+	handleMessageLinkAction: HandleMessageLinkAction;
+	url: string;
+};

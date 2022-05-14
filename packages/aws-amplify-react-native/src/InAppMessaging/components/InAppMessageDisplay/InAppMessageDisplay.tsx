@@ -20,8 +20,8 @@ import CarouselMessage from '../CarouselMessage';
 import ModalMessage from '../ModalMessage';
 
 import { useMessage, OnMessageAction } from '../hooks/useMessage';
-import handleAction from '../hooks/useMessage/handleAction';
-import handleLinkAction from '../hooks/useMessage/handleLinkAction';
+import handleAction from '../hooks/useMessage/handleMessageAction';
+import handleMessageLinkAction from './handleMessageLinkAction';
 
 import { MessageStyleProps } from '../hooks/useMessageProps';
 
@@ -30,7 +30,7 @@ import { InAppMessageDisplayProps } from './types';
 const platformComponents = { BannerMessage, FullScreenMessage, CarouselMessage, ModalMessage };
 
 const onMessageAction: OnMessageAction = ({ action, url }) => {
-	handleAction({ action, url, handleLinkAction });
+	handleAction({ action, url, handleMessageLinkAction });
 };
 
 function InAppMessageDisplay({ components: overrideComponents, styles }: InAppMessageDisplayProps<MessageStyleProps>) {

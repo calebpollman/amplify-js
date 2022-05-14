@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "jest -w 1 --coverage --maxWorkers 2 --config jest.config.js",
 		"test:verbose": "npm run test -- --verbose",
-		"build": "npm run lint && npm run clean && babel src --out-dir dist --extensions '.ts,.tsx,.js,.jsx' --copy-files",
+		"build": "npm run clean && babel src --out-dir dist --extensions '.ts,.tsx,.js,.jsx' --copy-files",
 		"watch": "npm run build -- --watch",
 		"build:cjs:watch": "npm run watch",
 		"build:esm:watch": "echo \"ES Modules are not exported in react-native. Use target build:cjs:watch\"",

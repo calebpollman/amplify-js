@@ -14,7 +14,7 @@
 import { Linking } from 'react-native';
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 
-import handleLinkAction from '../handleLinkAction';
+import handleMessageLinkAction from '../handleMessageLinkAction';
 
 jest.mock('react-native', () => ({ Linking: { canOpenURL: jest.fn(), openURL: jest.fn() } }));
 
@@ -33,7 +33,7 @@ describe('handleAction', () => {
 	it('logs a warning when Linking.canOpenUrl returns false', async () => {
 		(Linking.canOpenURL as jest.Mock).mockResolvedValueOnce(false);
 
-		await handleLinkAction(url);
+		await handleMessageLinkAction(url);
 
 		expect(Linking.canOpenURL).toHaveBeenCalledTimes(1);
 		expect(warnSpy).toHaveBeenCalledWith(`Unsupported url provided: ${url}`);
@@ -43,7 +43,7 @@ describe('handleAction', () => {
 	it('logs an error when Linking.canOpenUrl fails', async () => {
 		(Linking.canOpenURL as jest.Mock).mockRejectedValueOnce(error);
 
-		await handleLinkAction(url);
+		await handleMessageLinkAction(url);
 
 		expect(errorSpy).toHaveBeenCalledWith(`Call to Linking.canOpenURL failed: ${error}`);
 	});
@@ -52,7 +52,7 @@ describe('handleAction', () => {
 		(Linking.canOpenURL as jest.Mock).mockResolvedValueOnce(true);
 		(Linking.openURL as jest.Mock).mockRejectedValue(error);
 
-		await handleLinkAction(url);
+		await handleMessageLinkAction(url);
 
 		expect(errorSpy).toHaveBeenCalledWith(`Call to Linking.openURL failed: ${error}`);
 	});

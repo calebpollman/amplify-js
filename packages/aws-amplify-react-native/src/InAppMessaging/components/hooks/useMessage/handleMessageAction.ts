@@ -13,20 +13,11 @@
 
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 import isString from 'lodash/isString';
-
-import { HandleLinkAction } from './types';
+import { HandleMessageActionParams } from './types';
 
 const logger = new Logger('Notifications.InAppMessaging');
 
-const handleAction = ({
-	action,
-	handleLinkAction,
-	url,
-}: {
-	action: string;
-	handleLinkAction: HandleLinkAction;
-	url: string;
-}) => {
+const handleMessageAction = ({ action, handleMessageLinkAction, url }: HandleMessageActionParams) => {
 	logger.info(`Handle action: ${action}`);
 
 	if (action === 'LINK' || action === 'DEEP_LINK') {
@@ -35,8 +26,8 @@ const handleAction = ({
 			return;
 		}
 
-		handleLinkAction(url);
+		handleMessageLinkAction(url);
 	}
 };
 
-export default handleAction;
+export default handleMessageAction;

@@ -13,11 +13,11 @@
 
 import { Linking } from 'react-native';
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
+import { HandleMessageLinkAction } from '../hooks/useMessage';
 
 const logger = new Logger('Notifications.InAppMessaging');
 
-type HandleLinkAction = (url: string) => Promise<void>;
-const handleLinkAction: HandleLinkAction = async (url: string) => {
+const handleMessageLinkAction: HandleMessageLinkAction = async (url: string) => {
 	let supported: boolean;
 	try {
 		supported = await Linking.canOpenURL(url);
@@ -40,4 +40,4 @@ const handleLinkAction: HandleLinkAction = async (url: string) => {
 	}
 };
 
-export default handleLinkAction;
+export default handleMessageLinkAction;

@@ -14,7 +14,7 @@
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 import { InAppMessageAction } from '@aws-amplify/notifications';
 
-import handleAction from '../handleAction';
+import handleMessageAction from '../handleMessageAction';
 
 // use empty mockImplementation to turn off console output
 const infoSpy = jest.spyOn(Logger.prototype, 'info').mockImplementation();
@@ -25,15 +25,15 @@ const deepLink = 'DEEP_LINK';
 const link = 'LINK';
 const url = 'https://docs.amplify.aws/';
 
-const handleLinkAction = jest.fn();
+const handleMessageLinkAction = jest.fn();
 
-describe('handleAction', () => {
+describe('handleMessageAction', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
 	it.each([deepLink, link])('handles a %s action as expected in the happy path', (action: InAppMessageAction) => {
-		handleAction({ action, handleLinkAction, url });
+		handleMessageAction({ action, handleMessageLinkAction, url });
 
 		expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${action}`);
 		expect(infoSpy).toHaveBeenCalledTimes(1);
@@ -44,13 +44,13 @@ describe('handleAction', () => {
 		(action: InAppMessageAction) => {
 			const invalidUrl = null as string;
 
-			handleAction({ action, handleLinkAction, url: invalidUrl });
+			handleMessageAction({ action, handleMessageLinkAction, url: invalidUrl });
 
 			expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${action}`);
 			expect(infoSpy).toHaveBeenCalledTimes(1);
 			expect(warnSpy).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
 			expect(warnSpy).toHaveBeenCalledTimes(1);
-			expect(handleLinkAction).not.toHaveBeenCalled();
+			expect(handleMessageLinkAction).not.toHaveBeenCalled();
 		}
 	);
 
@@ -59,21 +59,21 @@ describe('handleAction', () => {
 		(action: InAppMessageAction) => {
 			const invalidUrl = undefined as string;
 
-			handleAction({ action, handleLinkAction, url: invalidUrl });
+			handleMessageAction({ action, handleMessageLinkAction, url: invalidUrl });
 
 			expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${action}`);
 			expect(warnSpy).toHaveBeenCalledWith(`url must be of type string: ${invalidUrl}`);
 			expect(infoSpy).toHaveBeenCalledTimes(1);
 			expect(warnSpy).toHaveBeenCalledTimes(1);
-			expect(handleLinkAction).not.toHaveBeenCalled();
+			expect(handleMessageLinkAction).not.toHaveBeenCalled();
 		}
 	);
 
 	it('logs when called with a close action', () => {
-		handleAction({ action: close, handleLinkAction, url });
+		handleMessageAction({ action: close, handleMessageLinkAction, url });
 
 		expect(infoSpy).toHaveBeenCalledWith(`Handle action: ${close}`);
 		expect(infoSpy).toHaveBeenCalledTimes(1);
-		expect(handleLinkAction).not.toHaveBeenCalled();
+		expect(handleMessageLinkAction).not.toHaveBeenCalled();
 	});
 });

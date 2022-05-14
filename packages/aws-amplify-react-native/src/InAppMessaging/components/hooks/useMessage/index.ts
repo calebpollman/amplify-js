@@ -12,4 +12,11 @@
  */
 
 export { default as useMessage } from './useMessage';
-export { MessageComponents, MessageComponentStyles, OnMessageAction } from './types';
+export { default as handleMessageAction } from './handleMessageAction';
+export {
+	HandleMessageActionParams,
+	HandleMessageLinkAction,
+	MessageComponents,
+	MessageComponentStyles,
+	OnMessageAction,
+} from './types';

@@ -15,7 +15,7 @@ import { InAppMessageButton, InAppMessageContent, InAppMessageLayout } from '@aw
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 import { getActionHandler, getContentProps, getPositionProp } from '../utils';
 
-jest.mock('../handleAction', () => ({ __esModule: true, default: jest.fn() }));
+jest.mock('../handleMessageAction', () => ({ __esModule: true, default: jest.fn() }));
 
 // use empty mockImplementation to turn off console output
 const errorSpy = jest.spyOn(Logger.prototype, 'error').mockImplementation();

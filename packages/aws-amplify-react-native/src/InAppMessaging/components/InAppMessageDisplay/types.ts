@@ -24,3 +24,5 @@ export interface InAppMessageDisplayProps<Style> {
 	 */
 	styles?: MessageComponentStyles<Style>;
 }
+
+export type HandleLinkAction = (url: string) => Promise<void>;
