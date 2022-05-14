@@ -15,12 +15,12 @@ import React from 'react';
 import TestRenderer from 'react-test-renderer';
 
 import { IN_APP_MESSAGING } from '../../../../AmplifyTestIDs';
-import useDeviceOrientation from '../../hooks/useDeviceOrientation';
+import useDeviceOrientation from '../../../ui/useDeviceOrientation';
 import useMessageImage from '../../hooks/useMessageImage';
 
 import ModalMessage from '../ModalMessage';
 
-jest.mock('../../hooks/useDeviceOrientation');
+jest.mock('../../../ui/useDeviceOrientation');
 jest.mock('../../hooks/useMessageImage');
 jest.mock('../../MessageWrapper', () => 'MessageWrapper');
 

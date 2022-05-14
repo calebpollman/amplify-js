@@ -14,6 +14,7 @@
 export { default as useMessage } from './useMessage';
 export { default as handleMessageAction } from './handleMessageAction';
 export {
+	CarouselMessageCommonProps,
 	HandleMessageActionParams,
 	HandleMessageLinkAction,
 	MessageComponents,

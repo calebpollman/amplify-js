@@ -14,13 +14,13 @@
 import React from 'react';
 import { act, create, ReactTestRenderer } from 'react-test-renderer';
 
-import useDeviceOrientation from '../../hooks/useDeviceOrientation';
+import useDeviceOrientation from '../../../ui/useDeviceOrientation';
 import useMessageImage from '../../hooks/useMessageImage';
 
 import CarouselMessageItem from '../CarouselMessageItem';
 
 jest.mock('react-native-safe-area-context', () => ({ SafeAreaView: 'SafeAreaView' }));
-jest.mock('../../hooks/useDeviceOrientation');
+jest.mock('../../../ui/useDeviceOrientation');
 jest.mock('../../hooks/useMessageImage');
 jest.mock('../../MessageLayout', () => ({ MessageLayout: 'MessageLayout' }));
 jest.mock('../../MessageWrapper', () => 'MessageWrapper');

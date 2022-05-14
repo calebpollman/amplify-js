@@ -19,7 +19,7 @@ import { InAppMessageComponentBaseProps } from '../../types';
 
 import { getMessageStyle, getMessageStyleProps } from './utils';
 import { GetDefaultStyle, UseMessageProps } from './types';
-import { DeviceOrientation } from '../useDeviceOrientation';
+import { DeviceOrientation } from '../../../ui/useDeviceOrientation';
 
 /**
  * Handle common message UI component prop logic including setting of image dimensions,

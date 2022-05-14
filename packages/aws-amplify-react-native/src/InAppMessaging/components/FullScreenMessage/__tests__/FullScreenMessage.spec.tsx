@@ -14,12 +14,12 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 
-import useDeviceOrientation from '../../hooks/useDeviceOrientation';
+import useDeviceOrientation from '../../../ui/useDeviceOrientation';
 import useMessageImage from '../../hooks/useMessageImage';
 
 import FullScreenMessage from '../FullScreenMessage';
 
-jest.mock('../../hooks/useDeviceOrientation');
+jest.mock('../../../ui/useDeviceOrientation');
 jest.mock('../../hooks/useMessageImage');
 jest.mock('../../MessageWrapper', () => 'MessageWrapper');
 jest.mock('../../MessageLayout', () => ({ MessageLayout: 'MessageLayout' }));

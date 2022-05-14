@@ -87,7 +87,7 @@ export type UseMessage<Style> = { Component: MessageComponent<Style>; props: Mes
 
 export type HandleMessageLinkAction = (url: string) => Promise<void>;
 export type HandleMessageActionParams = {
-	action: string;
+	action: InAppMessageAction;
 	handleMessageLinkAction: HandleMessageLinkAction;
 	url: string;
 };

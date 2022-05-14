@@ -19,7 +19,7 @@ import {
 	InAppMessageComponentButtonStyle,
 	InAppMessageComponentStyle,
 } from '../../types';
-import { DeviceOrientation } from '../useDeviceOrientation';
+import { DeviceOrientation } from '../../../ui/useDeviceOrientation';
 import { ImageDimensions } from '../useMessageImage';
 
 type InAppMessagePayloadStyle = {

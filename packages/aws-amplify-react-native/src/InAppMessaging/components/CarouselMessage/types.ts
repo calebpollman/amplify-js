@@ -11,7 +11,7 @@
  * and limitations under the License.
  */
 
-import { ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import {
 	InAppMessageComponentBaseProps,
 	InAppMessageComponentBaseStyle,
@@ -19,15 +19,21 @@ import {
 	InAppMessageComponentContentProps,
 } from '../types';
 
-export interface CarouselMessageProps extends InAppMessageComponentCommonProps {
-	data: InAppMessageComponentContentProps[];
-}
-
-export interface CarouselMessageItemProps extends InAppMessageComponentBaseProps {}
-
-export interface CarouselMessageStyle extends InAppMessageComponentBaseStyle {}
+import { MessageStyleProps } from '../hooks/useMessageProps';
+import { CarouselMessageCommonProps } from '../hooks/useMessage';
 
 export interface CarouselMessageComponentStyle {
 	pageIndicatorActive: ViewStyle;
 	pageIndicatorInactive: ViewStyle;
 }
+
+type CarouselMessageStyles = MessageStyleProps & {
+	pageIndicatorActive: StyleProp<ViewStyle>;
+	pageIndicatorInactive: StyleProp<ViewStyle>;
+};
+
+export type CarouselMessageProps = CarouselMessageCommonProps<CarouselMessageStyles>;
+
+export interface CarouselMessageItemProps extends InAppMessageComponentBaseProps {}
+
+export interface CarouselMessageStyle extends InAppMessageComponentBaseStyle {}

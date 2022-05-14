@@ -25,7 +25,7 @@ import {
 	getMessageStyleProps,
 	shouldFillDeviceScreen,
 } from '../utils';
-import { DeviceOrientation } from '../../useDeviceOrientation';
+import { DeviceOrientation } from '../../../../ui/useDeviceOrientation';
 
 type ResolveContainerStyle = { container: (state?: PressableStateCallbackType) => StyleProp<ViewStyle> };
 

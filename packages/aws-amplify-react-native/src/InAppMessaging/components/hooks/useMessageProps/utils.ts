@@ -17,7 +17,7 @@ import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { DEFAULT_CAROUSEL_INDICATOR_SIZE } from '../../../ui';
 import { BUTTON_PRESSED_OPACITY, SPACING_EXTRA_LARGE } from '../../constants';
 import { InAppMessageComponentBaseProps, InAppMessageComponentButtonStyle } from '../../types';
-import { DeviceOrientation } from '../useDeviceOrientation';
+import { DeviceOrientation } from '../../../ui/useDeviceOrientation';
 import { ButtonStylePropParams, MessageStylePropParams, MessageStyleProps } from './types';
 
 // Carousel page indicator size + margins

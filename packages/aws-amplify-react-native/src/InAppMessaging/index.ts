@@ -12,7 +12,6 @@
  */
 
 export {
-	InAppMessageComponents,
 	InAppMessagingContext,
 	InAppMessagingContextType,
 	InAppMessagingProvider,
