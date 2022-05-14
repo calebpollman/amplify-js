@@ -19,17 +19,13 @@ import {
 } from '@aws-amplify/notifications';
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
 
-import {
-	InAppMessageComponentButtonProps,
-	InAppMessageComponentContentProps,
-	InAppMessageComponentPosition,
-} from '../../types';
+import { MessageButtonProps, MessageComponentPosition, MessageContentProps } from './types';
 
 const logger = new Logger('Notifications.InAppMessaging');
 
 type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
 
-export const getPositionProp = (layout: InAppMessageLayout): InAppMessageComponentPosition => {
+export const getPositionProp = (layout: InAppMessageLayout): MessageComponentPosition => {
 	switch (layout) {
 		case 'BOTTOM_BANNER': {
 			return 'bottom';
@@ -66,7 +62,7 @@ const getButtonProps = (
 	{ action, url, ...baseButtonProps }: InAppMessageButton,
 	onMessageAction: OnMessageAction,
 	onActionCallback: () => void
-): InAppMessageComponentButtonProps => ({
+): MessageButtonProps => ({
 	...baseButtonProps,
 	...getActionHandler({ action, url }, onMessageAction, onActionCallback),
 });
@@ -75,8 +71,8 @@ export const getContentProps = (
 	content: InAppMessageContent,
 	onMessageAction: OnMessageAction,
 	onActionCallback: () => void
-): InAppMessageComponentContentProps => {
-	const props: InAppMessageComponentContentProps = {};
+): MessageContentProps => {
+	const props: MessageContentProps = {};
 
 	if (!content) {
 		return props;

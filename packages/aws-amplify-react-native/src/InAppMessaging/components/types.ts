@@ -67,15 +67,15 @@ export interface InAppMessageComponentContentProps
 	secondaryButton?: InAppMessageComponentButtonProps;
 }
 
-export interface InAppMessageComponentCommonProps {
+export interface InAppMessageComponentCommonProps<Style> {
 	layout: InAppMessageLayout;
 	onClose?: () => void;
 	onDisplay?: () => void;
-	style?: InAppMessageComponentStyle;
+	style?: Style;
 }
 
-export interface InAppMessageComponentBaseProps
-	extends InAppMessageComponentCommonProps,
+export interface InAppMessageComponentBaseProps<Style = unknown>
+	extends InAppMessageComponentCommonProps<Style>,
 		InAppMessageComponentContentProps {}
 
 export interface InAppMessageComponentBaseStyle {

@@ -37,7 +37,7 @@ module.exports = {
 	rules: {
 		'@typescript-eslint/member-ordering': 'error',
 		'@typescript-eslint/no-extra-semi': 'error',
-		'@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true }],
+		'@typescript-eslint/no-unused-expressions': ['off', { allowTernary: true }],
 		'@typescript-eslint/no-floating-promises': ['off'],
 		'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '_', varsIgnorePattern: '_' }],
 		'@typescript-eslint/prefer-nullish-coalescing': 'error',

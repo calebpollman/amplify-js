@@ -12,22 +12,13 @@
  */
 
 import { ConsoleLogger as Logger } from '@aws-amplify/core';
-import { Notifications, InAppMessageInteractionEvent, InAppMessageAction } from '@aws-amplify/notifications';
+import { Notifications, InAppMessageInteractionEvent } from '@aws-amplify/notifications';
 import isNil from 'lodash/isNil';
 
-import { InAppMessageComponents } from '../../../context';
 import { useInAppMessaging } from '../../../hooks';
 
-import { BannerMessageProps } from '../../BannerMessage';
-import { CarouselMessageProps } from '../../CarouselMessage';
-import { FullScreenMessageProps } from '../../FullScreenMessage';
-import { ModalMessageProps } from '../../ModalMessage';
-import { InAppMessageComponentCommonProps, InAppMessageComponentStyles } from '../../types';
-
-import { InAppMessageComponent } from './types';
+import { UseMessage, UseMessageProps } from './types';
 import { getContentProps, getPositionProp } from './utils';
-
-type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
 
 const { InAppMessaging } = Notifications;
 
@@ -38,18 +29,11 @@ const logger = new Logger('Notifications.InAppMessaging');
  *
  * @returns {object} contains the message UI component and props
  */
-export default function useMessage({
+export default function useMessage<Style>({
 	components,
 	onMessageAction,
 	styles,
-}: {
-	components: InAppMessageComponents;
-	onMessageAction: OnMessageAction;
-	styles: InAppMessageComponentStyles;
-}): {
-	Component: InAppMessageComponent;
-	props: InAppMessageComponentCommonProps;
-} {
+}: UseMessageProps<Style>): UseMessage<Style> {
 	const { clearInAppMessage, inAppMessage } = useInAppMessaging();
 	const { BannerMessage, CarouselMessage, FullScreenMessage, ModalMessage } = components;
 
@@ -77,43 +61,43 @@ export default function useMessage({
 		case 'BOTTOM_BANNER':
 		case 'MIDDLE_BANNER':
 		case 'TOP_BANNER': {
-			const props: BannerMessageProps = {
+			const props = {
 				...getContentProps(content?.[0], onMessageAction, onActionCallback),
 				layout,
 				onClose,
 				onDisplay,
 				position: getPositionProp(layout),
-				style: styles?.BannerMessage,
+				style: styles?.bannerMessage,
 			};
 			return { Component: BannerMessage, props };
 		}
 		case 'CAROUSEL': {
-			const props: CarouselMessageProps = {
+			const props = {
 				data: content?.map((item) => getContentProps(item, onMessageAction, onActionCallback)),
 				layout,
 				onClose,
 				onDisplay,
-				style: styles?.CarouselMessage,
+				style: styles?.carouselMessage,
 			};
 			return { Component: CarouselMessage, props };
 		}
 		case 'FULL_SCREEN': {
-			const props: FullScreenMessageProps = {
+			const props = {
 				...getContentProps(content?.[0], onMessageAction, onActionCallback),
 				layout,
 				onClose,
 				onDisplay,
-				style: styles?.FullScreenMessage,
+				style: styles?.fullScreenMessage,
 			};
 			return { Component: FullScreenMessage, props };
 		}
 		case 'MODAL': {
-			const props: ModalMessageProps = {
+			const props = {
 				...getContentProps(content?.[0], onMessageAction, onActionCallback),
 				layout,
 				onClose,
 				onDisplay,
-				style: styles?.ModalMessage,
+				style: styles?.modalMessage,
 			};
 			return { Component: ModalMessage, props };
 		}

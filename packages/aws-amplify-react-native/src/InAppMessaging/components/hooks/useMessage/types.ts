@@ -11,10 +11,76 @@
  * and limitations under the License.
  */
 
-import { ReactElement } from 'react';
+import {
+	InAppMessageAction,
+	InAppMessageButton,
+	InAppMessageContent,
+	InAppMessageLayout,
+} from '@aws-amplify/notifications';
 
-import { InAppMessageComponentCommonProps } from '../../types';
+export type MessageButtonProps = Omit<InAppMessageButton, 'action' | 'url'> & { onAction: () => void };
 
-export type HandleLinkAction = (url: string) => Promise<void>;
+// omit payload button props, replace with MessageButtonProps
+export type MessageContentProps = Omit<InAppMessageContent, 'primaryButton' | 'secondaryButton'> & {
+	primaryButton?: MessageButtonProps;
+	secondaryButton?: MessageButtonProps;
+};
 
-export type InAppMessageComponent = (props: InAppMessageComponentCommonProps) => ReactElement;
+// props common to each Message component
+type MessageCommonProps<Style> = {
+	layout: InAppMessageLayout;
+	onClose: () => void;
+	onDisplay: () => void;
+	style: Style;
+};
+
+export type MessageComponentPosition = 'bottom' | 'middle' | 'top' | null;
+
+// Banner requires a `position` prop
+export type BannerMessageCommonProps<Style> = MessageCommonProps<Style> &
+	MessageContentProps & { position: MessageComponentPosition };
+// Carousel message nests content props in its `data` prop
+export type CarouselMessageCommonProps<Style> = MessageCommonProps<Style> & { data: MessageContentProps[] };
+export type FullScreenMessageCommonProps<Style> = MessageCommonProps<Style> & MessageContentProps;
+export type ModalMessageCommonProps<Style> = MessageCommonProps<Style> & MessageContentProps;
+
+type OnMessageAction = (params: { action: InAppMessageAction; url?: string }) => void;
+
+type BannerMessage<Style> = (props: BannerMessageCommonProps<Style>) => JSX.Element;
+type CarouselMessage<Style> = (props: CarouselMessageCommonProps<Style>) => JSX.Element;
+type FullScreenMessage<Style> = (props: FullScreenMessageCommonProps<Style>) => JSX.Element;
+type ModalMessage<Style> = (props: ModalMessageCommonProps<Style>) => JSX.Element;
+
+type MessageComponents<Style> = {
+	BannerMessage: BannerMessage<Style>;
+	CarouselMessage: CarouselMessage<Style>;
+	FullScreenMessage: FullScreenMessage<Style>;
+	ModalMessage: ModalMessage<Style>;
+};
+
+type MessageComponent<Style> =
+	| BannerMessage<Style>
+	| CarouselMessage<Style>
+	| FullScreenMessage<Style>
+	| ModalMessage<Style>;
+
+type MessageProps<Style> =
+	| BannerMessageCommonProps<Style>
+	| CarouselMessageCommonProps<Style>
+	| FullScreenMessageCommonProps<Style>
+	| ModalMessageCommonProps<Style>;
+
+type MessageComponentStyles<Style> = {
+	bannerMessage: Style;
+	carouselMessage: Style;
+	fullScreenMessage: Style;
+	modalMessage: Style;
+};
+
+export interface UseMessageProps<Style> {
+	components: MessageComponents<Style>;
+	onMessageAction: OnMessageAction;
+	styles: MessageComponentStyles<Style>;
+}
+
+export type UseMessage<Style> = { Component: MessageComponent<Style>; props: MessageProps<Style> };
